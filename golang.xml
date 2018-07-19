@@ -1,0 +1,5 @@
+<PAReceive>
+    <Description>这是测试文件</Description>
+    <ServerPort>1280</ServerPort>
+    <ApiServerIp>192.168.0.122</ApiServerIp>
+</PAReceive>
