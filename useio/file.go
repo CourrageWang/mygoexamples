@@ -167,7 +167,6 @@ func writefileUsebuf() {
 		log.Fatal(er)
 	}
 
-
 	//使用Write方法,需要使用Writer对象的Flush方法将buffer中的数据刷到磁盘
 	buf := []byte(" write by bytes\n")
 	if _, err := buferedWrite.Write(buf); err == nil {
@@ -197,6 +196,78 @@ func writefileUsebuf() {
 	buferedWrite.Reset(buferedWrite)
 	bytesAvailable := buferedWrite.Available()
 	log.Printf("Auailable buffer %d", bytesAvailable)
+}
+
+// 读取最多N个字节
+func mostRead() {
+	file, err := os.Open("new_test.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	byteSlice := make([] byte, 16)
+	_, err2 := file.Read(byteSlice)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+	//log.Fatalf("has readed %d", len)
+	log.Fatalf("data is :%s", byteSlice)
+}
+
+// 读取全部字节
+func readAll() {
+	file, err := os.Open("new_test.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	data, err2 := ioutil.ReadAll(file)
+	if err2 != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("data is %s", data)
+}
+
+//读取文件到内存
+func ReadToMemory() {
+
+	// 读取文件到byte slice中
+	data, err := ioutil.ReadFile("new_test.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Fatalf("the data is %s", data)
+}
+
+// 使用缓存读
+func readUseBuf() {
+	file, err2 := os.Open("new_test.txt")
+	if err2 != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	buferedReader := bufio.NewReader(file)
+	//  得到字节 ，当前指针不变
+	byteslice := make([]byte, 5)
+	byteslice, err = buferedReader.Peek(5) // peek返回输入流的下n个字节。而不会移动读取的位置。
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("peekde at 5 bytes %s\n ", byteslice)
+
+	// 读取同时移动指针
+	_, rerr := buferedReader.Read(byteslice)
+	if rerr != nil {
+		log.Fatal(rerr)
+	}
+	fmt.Printf("read data is %s\n", byteslice)
+
+	// 读取到分割符
+	data, byerr := buferedReader.ReadBytes('\n')
+	if byerr != nil {
+		log.Fatal(byerr)
+	}
+	fmt.Printf("the data is:%s", data)
 
 }
 func main() {
@@ -208,5 +279,9 @@ func main() {
 	//copyfile()
 	//writeFile()
 	//quickwriteFile()
-	writefileUsebuf()
+	//writefileUsebuf()
+	//mostRead()
+	//readAll()
+	//ReadToMemory()
+	readUseBuf()
 }
