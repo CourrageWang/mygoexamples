@@ -10,7 +10,7 @@ func main() {
 	fmt.Println("Client")
 	localip := net.ParseIP("192.168.0.105")
 	remoteip := net.ParseIP("192.168.0.195")
-	lAddr := &net.UDPAddr{IP: localip, Port: 7770} //源地址
+	lAddr := &net.UDPAddr{IP: localip, Port: 9098} //源地址
 	rAddr := &net.UDPAddr{IP: remoteip, Port: 9527}
 	conn, err := net.DialUDP("udp4", lAddr, rAddr) //目标地址
 	if err != nil {

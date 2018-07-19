@@ -27,7 +27,7 @@ func main() {
 func listenUdp() {
 	// 指定端口号
 	laddr := net.ParseIP("0.0.0.0")
-	addr := &net.UDPAddr{IP: laddr, Port: 8080}
+	addr := &net.UDPAddr{IP: laddr, Port: 9527}
 	conn, err := net.ListenUDP("udp4", addr,
 		//	&net.UDPAddr{
 		//	IP:   net.IPv4(127, 0, 0, 1),

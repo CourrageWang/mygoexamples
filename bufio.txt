@@ -1,0 +1,2 @@
+这是测试 write by bytes
+hello this is string ..
