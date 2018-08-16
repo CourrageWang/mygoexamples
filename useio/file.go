@@ -283,5 +283,6 @@ func main() {
 	//mostRead()
 	//readAll()
 	//ReadToMemory()
-	readUseBuf()
+	//readUseBuf()
+	writefileUsebuf()
 }
