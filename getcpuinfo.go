@@ -14,19 +14,27 @@ var cpuprofile = flag.String("cpuprofile", "", "write cpu profile `file`")
 var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
 
 func main() {
-	log.Println("begin")
-	flag.Parse()
-
-		f, err := os.Create("cpuprofile.prof")
-		if err != nil {
-			log.Fatal("could not create CPU profile: ", err)
-		}
-		if err := pprof.StartCPUProfile(f); err != nil {
-			log.Fatal("could not start CPU profile: ", err)
-		}
-		defer pprof.StopCPUProfile()
+	//log.Println("begin")
+	//flag.Parse()
+	//
+	//	f, err := os.Create("cpuprofile.prof")
+	//	if err != nil {
+	//		log.Fatal("could not create CPU profile: ", err)
+	//	}
+	//	if err := pprof.StartCPUProfile(f); err != nil {
+	//		log.Fatal("could not start CPU profile: ", err)
+	//	}
+	//	defer pprof.StopCPUProfile()
 
 	//heapProfile("cpu1.prof")
+
+	mem, _ := os.Create("mem.out")
+	defer mem.Close()
+	defer pprof.WriteHeapProfile(mem)
+
+	mom, _ := os.Create("mom.out")
+	defer mem.Close()
+	defer pprof.WriteHeapProfile(mom)
 	for i := 0; i < 30; i++ {
 
 		nums := fibonacci2(i)
@@ -36,10 +44,10 @@ func main() {
 
 		f2, err2 := os.Create("mem.prof")
 		if err2 != nil {
-			log.Fatal("could not create memory profile: ", err)
+			log.Fatal("could not create memory profile: ", err2)
 		}
 		runtime.GC() // get up-to-date statistics
-		if err := pprof.WriteHeapProfile(f); err != nil {
+		if err := pprof.WriteHeapProfile(f2); err != nil {
 			log.Fatal("could not write memory profile: ", err)
 		}
 		f2.Close()
