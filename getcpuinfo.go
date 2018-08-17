@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"runtime/pprof"
-	"time"
 	"flag"
 	"runtime"
 )
@@ -27,7 +26,7 @@ func main() {
 		defer pprof.StopCPUProfile()
 
 	//heapProfile("cpu1.prof")
-	for i := 0; i < 30; i++ {
+	for i := 0; i < 300; i++ {
 
 		nums := fibonacci2(i)
 		//heapProfile("cpu1.prof")
@@ -54,32 +53,12 @@ func fibonacci2(num int) int {
 	}
 	return fibonacci2(num-1) + fibonacci2(num-2)
 }
-func cpuProfile() {
-	f, err := os.OpenFile("cpu.prof", os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		log.Fatal(err)
+func Heapfile() {
+	Heap,err := os.Create("theap.prof")
+	if err!=nil {
+		return
 	}
-	defer f.Close()
-
-	log.Println("CPU Profile started")
-	pprof.StartCPUProfile(f)
-	defer pprof.StopCPUProfile()
-
-	time.Sleep(60 * time.Second)
-	fmt.Println("CPU Profile stopped")
+	defer  Heap.Close()
+	pprof.WriteHeapProfile(Heap)
 }
 
-// 生成堆内存报告
-func heapProfile(path string) {
-	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	time.Sleep(30 * time.Second)
-	defer f.Close()
-	pprof.StartCPUProfile(f)
-	defer pprof.StopCPUProfile()
-
-}

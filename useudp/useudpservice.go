@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"strings"
 )
+
 //http://zuozuohao.github.io/2016/06/16/Practical-Persistence-in-Go-Organising-Database-Access/
 // 封装派网信息 方便业务扩展
 type PannabitEvent struct {
 	eventType   string      //事件类型
 	detailEvent interface{} //详细信息
 }
+
 // 认证事件详细信息
 type DetailusrAuth struct {
 	loginTime  string
@@ -18,6 +20,7 @@ type DetailusrAuth struct {
 	account    string
 	macAddr    string
 }
+
 /**
   udp 服务端
  */
@@ -36,7 +39,7 @@ func listenUdp() {
 
 	)
 	if err != nil {
-		fmt.Println("listen err ...",err)
+		fmt.Println("listen err ...", err)
 		return
 	}
 	defer conn.Close()
@@ -49,8 +52,21 @@ func listenUdp() {
 			return
 		}
 		fmt.Println("remoteAddr:", remoteAddr)
+
 		arrData := strings.Split(string(data[:size]), " ")
-		HandleMessage(arrData)
+		fmt.Println("获取到的数据为：", arrData)
+
+		//HandleMessage(arrData)]
+		handleTest(arrData)
+	}
+
+}
+func handleTest(data []string) {
+	if ok := len(data); ok > 0 {
+		action := strings.Split(data[0], ">")[1]
+		fmt.Println("action:", action)
+		fmt.Println("ip is :", data[3])
+
 	}
 
 }
