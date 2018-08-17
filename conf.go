@@ -12,7 +12,7 @@ const localpath = "conf.ini"
 [demo]
 key1 = "asta"
 key2 = "xie"
-
+z
 可以通过 iniconf.String("demo::key2") 获取值
 
 
