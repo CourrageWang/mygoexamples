@@ -21,7 +21,7 @@ func main() {
 	//	log.Fatal(1)
 	//}
 	//service := os.Args[1]
-	service := "192.168.0.104:1234"
+	service := "192.168.0.104:1234" //需要调用服务的地址。
 	client, err1 := jsonrpc.Dial("tcp", service)
 	if err1 != nil {
 		log.Fatal("dialing:", err1)
