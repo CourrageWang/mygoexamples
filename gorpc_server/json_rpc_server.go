@@ -19,7 +19,7 @@ type Quotient struct {
 
 type Arith int
 
-func (t *Arith) multiply(args *Args, reply *int) error {
+func (t *Arith) Multiply(args *Args, reply *int) error {
 	*reply = args.A * args.B
 	return nil
 }
