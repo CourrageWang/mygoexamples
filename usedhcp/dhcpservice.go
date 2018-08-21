@@ -3,6 +3,14 @@ package main
 /**
     ------------------ DHCP service....------------------
 http://blog.51cto.com/tonyguo/163475
+ //  冲突检测
+https://blog.csdn.net/a1232345/article/details/44920313
+
+https://blog.csdn.net/Butingnal/article/details/76067092
+属性：
+https://blog.csdn.net/qq_36088602/article/details/70746608
+
+
  */
 
 import (
@@ -30,6 +38,7 @@ func main() {
 			dhcp.OptionSubnetMask:       []byte{255, 255, 255, 0},       //子网掩码
 			dhcp.OptionRouter:           []byte(net.IP{192, 168, 0, 1}), // 假设服务是你的路由器
 			dhcp.OptionDomainNameServer: []byte(net.IP{61, 134, 1, 4}),  // 假设服务器是你的dns服务器
+
 		},
 	}
 	log.Fatal(dhcp.ListenAndServe(handler))
@@ -95,7 +104,7 @@ func (h *DHCPHandler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options
 		nic := p.CHAddr().String()
 		for i, v := range h.leases {
 			if v.nic == nic {
-				fmt.Println("ip冲突 。。。..." , h.leases )
+				fmt.Println("ip冲突 。。。...", h.leases)
 				delete(h.leases, i)
 				break
 			}
