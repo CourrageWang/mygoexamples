@@ -12,22 +12,24 @@ import (
 	"math/rand"
 	"net"
 	"time"
+	"fmt"
 )
 
 // 使用DHCP与单个网络接口设备的示例
 func main() {
 	log.Print("正在开启dhcp服务器......")
-	serverIP := net.IP{127, 0, 0, 1} //serverIp 172.30.0.1 //192.168.0.101
+	serverIP := net.IP{192, 168, 0, 125} //serverIp 172.30.0.1 //192.168.0.101
+
 	handler := &DHCPHandler{
 		ip:            serverIP,
-		leaseDuration: 2 * time.Hour,
-		start:         net.IP{0, 0, 0, 0},
-		leaseRange:    50,
+		leaseDuration: 5 * time.Second,
+		start:         net.IP{192, 168, 0, 120},
+		leaseRange:    3,
 		leases:        make(map[int]lease, 10),
 		options: dhcp.Options{
-			dhcp.OptionSubnetMask:       []byte{255, 255, 255, 255}, //子网掩码
-			dhcp.OptionRouter:           []byte(serverIP),           // 假设服务是你的路由器
-			dhcp.OptionDomainNameServer: []byte(serverIP),           // 假设服务器是你的dns服务器
+			dhcp.OptionSubnetMask:       []byte{255, 255, 255, 0},       //子网掩码
+			dhcp.OptionRouter:           []byte(net.IP{192, 168, 0, 1}), // 假设服务是你的路由器
+			dhcp.OptionDomainNameServer: []byte(net.IP{61, 134, 1, 4}),  // 假设服务器是你的dns服务器
 		},
 	}
 	log.Fatal(dhcp.ListenAndServe(handler))
@@ -57,10 +59,12 @@ func (h *DHCPHandler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options
 		for i, v := range h.leases { // Find previous lease
 			if v.nic == nic {
 				free = i
+				log.Println("I am at here1 ", free)
 				goto reply
 			}
 		}
 		if free = h.freeLease(); free == -1 {
+			log.Println("I am at here2 ", free)
 			return
 		}
 	reply:
@@ -91,6 +95,7 @@ func (h *DHCPHandler) ServeDHCP(p dhcp.Packet, msgType dhcp.MessageType, options
 		nic := p.CHAddr().String()
 		for i, v := range h.leases {
 			if v.nic == nic {
+				fmt.Println("ip冲突 。。。..." , h.leases )
 				delete(h.leases, i)
 				break
 			}
@@ -105,6 +110,7 @@ func (h *DHCPHandler) freeLease() int {
 	for _, v := range [][]int{[]int{b, h.leaseRange}, []int{0, b}} {
 		for i := v[0]; i < v[1]; i++ {
 			if l, ok := h.leases[i]; !ok || l.expiry.Before(now) {
+				log.Println("I am at here3 ", )
 				return i
 			}
 		}
