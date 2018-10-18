@@ -64,7 +64,6 @@ func UnMarshalToMap() {
 	errs := json.Unmarshal(data, &dataMap)
 	if errs != nil {
 		fmt.Println("JSON unmashaling  failed...", errs)
-
 	}
 	fmt.Println(dataMap)
 
