@@ -8,8 +8,8 @@ import (
 	"gopkg.in/ldap.v2"
 )
 
-var attributes []string
-var Dn string
+var attributes2 []string
+//var Dn string
 
 func main() {
 	/**  如果ldap禁止匿名查询，需要使用账户才能开始查询，bind账户需要完整的DN信息。
@@ -21,7 +21,7 @@ func main() {
 
 	//binUername := "cn=Manager,dc=maxcrc,dc=com"
 	//bindPassword := "secret"
-	cli, err := ldap.Dial("tcp", fmt.Sprintf("%s:%d", "127.0.0.1", 389))
+	cli, err := ldap.Dial("tcp", fmt.Sprintf("%s:%d", "192.168.0.195", 389))
 	if err != nil {
 		fmt.Println("err", err)
 	}
@@ -40,10 +40,10 @@ func main() {
 
 	//绑定完成后就有了查询权限，构造查询请求
 	searchRequest := ldap.SearchRequest{
-		BaseDN:       "ou=People,dc=maxcrc,dc=com",
+		BaseDN:       "ou=bzks,ou=People,dc=ecust,dc=edu,dc=cn",
 		Scope:        ldap.ScopeWholeSubtree,
 		DerefAliases: ldap.NeverDerefAliases,
-		TimeLimit:    0,
+		TimeLimit:    999999,
 		TypesOnly:    false,
 	}
 	//  filter Ldap的查询条件
@@ -55,14 +55,14 @@ func main() {
 
 	searchRequest.Filter = filter2 // 设置属性
 	// Attributes  想要获取的属性
-	attributes = append(attributes, "mail")
-	attributes = append(attributes, "labeledURI")
-	attributes = append(attributes, "cn")
+	attributes2 = append(attributes2, "mail")
+	attributes2 = append(attributes2, "mobile")
+	attributes2 = append(attributes2, "cn")
 
-	searchRequest.Attributes = attributes
+	searchRequest.Attributes = attributes2
 
 	//查询
-	sr, errS := cli.SearchWithPaging(&searchRequest, 1000)
+	sr, errS := cli.SearchWithPaging(&searchRequest, 99)
 
 	if errS != nil {
 		fmt.Println("errS", errS)
