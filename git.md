@@ -5,3 +5,4 @@
 ##### 主分支用来发布重大版本，日常开发应在另一条分支上完成，叫做应用开发分支 develop 这个分支可以用来生成最新的代码，如过想对外正式发布，就在Master分支上 对Develop分支进行合并。
 
 ##### 功能分支`Feature`为了开发某种功能，从Develop分支上创建出来的，开发完成后再合入Develop分支。
+>  在`master`分支上添加`develop`分支在`develop`上 创建`feature`分支。
