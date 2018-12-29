@@ -2,10 +2,10 @@ package main
 
 import (
 	"io/ioutil"
-	"fmt"
-	"encoding/xml"
-)
 
+ ft "fmt"
+"encoding/xml"
+)
 type XLReceive struct {
 	Description string
 	ServerPort  string
@@ -20,12 +20,13 @@ type PAReceive struct {
 }
 
 func main() {
+
 	getXMlInfo()
 }
 func getXMlInfo() {
 	content, err := ioutil.ReadFile("golang.xml")
 	if err != nil {
-		fmt.Println("read file faiel ", err)
+		ft.Println("read file faiel ", err)
 	}
 	var result XLReceive
 	err2 := xml.Unmarshal(content, &result)
@@ -42,7 +43,7 @@ func getXMlInfo() {
 	}
 
 	//生成xml并追加
-	data, err3 := xml.MarshalIndent(&paReceive,"","  ")
+	data, err3 := xml.MarshalIndent(&paReceive, "", "  ")
 	if err3 != nil {
 		fmt.Println("marshal failed .. ", err3)
 	}

@@ -43,7 +43,7 @@ func main() {
 
 	//绑定完成后就有了查询权限，构造查询请求
 	searchRequest := ldap.SearchRequest{
-		BaseDN:       "ou=bzks,ou=People,dc=ecust,dc=edu,dc=cn",
+		BaseDN:       "ou=People,dc=nenu,dc=edu,dc=cn",
 		Scope:        ldap.ScopeWholeSubtree,
 		DerefAliases: ldap.NeverDerefAliases,
 		TimeLimit:    10,
@@ -53,27 +53,28 @@ func main() {
 	//  filter Ldap的查询条件
 	//filter := fmt.Sprintf("(&(objectClass=inetOrgPerson)(uid=%s))", userName) // 查询指定用户
 
-	// 查询 inetOrgPerson分 支下的所有‘用户
+	// 查询 inetOrgPerson分 支下的所有用户
 
-	filter2 := "(&(objectClass=inetOrgPerson))"
+	filter2 := "(&(objectClass=*))"
 
 	//searchRequest.Filter = filter2 // 设置属性
 
 	fil, err := ldap.ParseFilter(filter2)
 
 	// Attributes  想要获取的属性
-	attributes = append(attributes, "mail")
-	attributes = append(attributes, "mobile")
-	attributes = append(attributes, "cn")
+	//attributes = append(attributes, "mail")
+	//attributes = append(attributes, "mobile")
+	//attributes = append(attributes, "cn")
 
-
-	atrr :="mail,mobile,cn"
+	atrr := "ou"
 	searchRequest.Filter = fil
 
-	attr := strings.Split(atrr, ",")
-	searchRequest.Attributes = make(map[string]bool)
-	for _, a := range attr {
-		searchRequest.Attributes[a] = true
+	if len(atrr) > 0 {
+		attr := strings.Split(atrr, ",")
+		searchRequest.Attributes = make(map[string]bool)
+		for _, a := range attr {
+			searchRequest.Attributes[a] = true
+		}
 	}
 
 	//searchRequest.Attributes = attributes
@@ -94,9 +95,9 @@ func main() {
 	s := make([] *ldap.SearchResult, 0)
 	for _, Att := range sr {
 		s = append(s, Att)
-		//fmt.Println(Att)
-		//searchRes = append(searchRes,Att)
-		if len(s) == 500 {
+		fmt.Println(Att)
+
+		if len(s) >= 0 {
 			//println(s)
 			go handleAttributes_v2(s)
 			s = nil // 将原先得切片置空
@@ -119,23 +120,20 @@ func main() {
 
 }
 
-//// 处理用户的属性名及信息
-//func handleAttributes(entry ldap.Entry) {
-// fmt.Println("DN:=", entry.DN) // 详细信息
-// for _, Value := range entry.Attributes {
-//  fmt.Println("Name:", Value.Name, "Value:", Value.Values)
-// }
-//}
+
 
 func handleAttributes_v2(str [] *ldap.SearchResult) {
-	//fmt.Println(str)
+	fmt.Println(str)
 
 	for _, e := range str {
 
 		for i, v := range e.Attributes {
+			//
+			fmt.Println("i=", i,"====", string(v[0]), "***",e.DN)
+			//fmt.Println(e.DN)
+			//}
+			//fmt.Println("--->", e.DN)
 
-			fmt.Println(i, string(v[0]))
 		}
-
 	}
 }

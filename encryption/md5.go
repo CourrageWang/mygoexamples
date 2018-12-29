@@ -24,6 +24,6 @@ func enMd52(source string) string {
 }
 
 func main() {
-	fmt.Println(enMd51("123456"))
-	fmt.Println(enMd52("123456"))
+	fmt.Println(enMd51("asdfghj"))
+	fmt.Println(enMd52("asdfghj"))
 }

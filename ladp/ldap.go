@@ -40,7 +40,7 @@ func main() {
 
 	//绑定完成后就有了查询权限，构造查询请求
 	searchRequest := ldap.SearchRequest{
-		BaseDN:       "ou=bzks,ou=People,dc=ecust,dc=edu,dc=cn",
+		BaseDN:       "ou=People,dc=nenu,dc=edu,dc=cn",
 		Scope:        ldap.ScopeWholeSubtree,
 		DerefAliases: ldap.NeverDerefAliases,
 		TimeLimit:    999999,
@@ -51,13 +51,14 @@ func main() {
 
 	// 查询 inetOrgPerson分 支下的所有‘用户
 
-	filter2 := "(&(objectClass=inetOrgPerson))"
+	filter2 := "(&(objectClass=top))"
 
 	searchRequest.Filter = filter2 // 设置属性
 	// Attributes  想要获取的属性
 	attributes2 = append(attributes2, "mail")
 	attributes2 = append(attributes2, "mobile")
 	attributes2 = append(attributes2, "cn")
+	attributes2 = append(attributes2, "userPassWord")
 
 	searchRequest.Attributes = attributes2
 
