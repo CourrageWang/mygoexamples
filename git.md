@@ -6,3 +6,4 @@
 
 ##### 功能分支`Feature`为了开发某种功能，从Develop分支上创建出来的，开发完成后再合入Develop分支。
 >  在`master`分支上添加`develop`分支在`develop`上 创建`feature`分支。
+##### 预发布分支 `release` 发布在正式版之前(合并到`master`之前)，需要一个预发布的版本进行测试，预发布版本是从`develop`版本上分出来的，完毕后必须合并在`develop`和`master`分支上。
