@@ -11,7 +11,6 @@ type XLReceive struct {
 	ServerPort  string
 	ApiServerIp string
 }
-
 //
 type PAReceive struct {
 	Description string
@@ -49,5 +48,4 @@ func getXMlInfo() {
 	}
 	fmt.Println(string(data[:len(data)]))
 	//ioutil.WriteFile("golang.xml", data, 0644)
-
 }
