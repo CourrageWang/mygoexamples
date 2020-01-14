@@ -12,10 +12,10 @@ import (
     beego orm 增删改查
  */
 const (
-	DRIVERNAME    = "mysql"
-	DATASOURCE    = "root:123456@tcp(127.0.0.1:3306)/test?charset=utf8&loc=Asia%2FShanghai"
-	MAX_IDLE_CONN = 5
-	MAX_OPEN_CONN = 30
+	DRIVER     = "mysql"
+	DATABASES  = "root:123456@tcp(127.0.0.1:3306)/test?charset=utf8&loc=Asia%2FShanghai"
+	MaxIdleCon = 5
+	MaxOpenCon = 30
 )
 
 type User struct {
@@ -23,7 +23,6 @@ type User struct {
 	Name  string
 	Email string
 	Age   int
-	//isActive bool
 }
 
 func (u *User) TableName() string { // 数据库中表名称
@@ -32,7 +31,7 @@ func (u *User) TableName() string { // 数据库中表名称
 func registerDB() {
 
 	orm.Debug = true
-	orm.RegisterDataBase("default", DRIVERNAME, DATASOURCE, MAX_IDLE_CONN, MAX_OPEN_CONN)
+	orm.RegisterDataBase("default", DRIVER, DATABASES, MaxIdleCon, MaxOpenCon)
 	orm.RegisterModel(new(User))
 }
 
@@ -63,13 +62,13 @@ func listUsers() {
 
 // 统计用户的个数
 
-func ountUser() {
+func countUser() {
 	cont, _ := orm.NewOrm().QueryTable("t_user").Count()
 	fmt.Printf("all user is %d ", cont)
 }
 
 // 根据条件查询用户
-func getUser() {
+func queryUser() {
 	var user User
 	err := orm.NewOrm().QueryTable("t_user").Filter("Id", 3).One(&user)
 	if err == nil {
@@ -80,7 +79,7 @@ func getUser() {
 
 // 使用 limit offset字段
 
-func limitoffersetUser() {
+func limitUser() {
 	var users [] User
 	_, err := orm.NewOrm().QueryTable("t_user").Limit(1, 3).OrderBy("id").All(&users)
 	if err == nil {
@@ -92,7 +91,7 @@ func limitoffersetUser() {
 }
 
 //  删除用户
-func delUse() {
+func deleteUser() {
 
 	num, err := orm.NewOrm().QueryTable("t_user").Filter("id", 2).Delete()
 	if err != nil {
@@ -117,12 +116,12 @@ func updateUser() {
 
 func main() {
 	registerDB()
-	//createUsers()
-	//listUsers()
-	//ountUser()
-	//getUser()
-	//limitoffersetUser()
-	//delUse()
+	createUsers()
+	listUsers()
+	countUser()
+	queryUser()
+	limitUser()
+	deleteUser()
 	updateUser()
 	beego.Run()
 
