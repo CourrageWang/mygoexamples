@@ -99,5 +99,4 @@ func handleAuth(parms [] string) {
 	fmt.Println(event)
 	fmt.Println(event.detailEvent.(DetailusrAuth)) //强制转换为DetailusrAuth.获取到数据，做后续处理
 	// 具体业务处理。。。。
-
 }
