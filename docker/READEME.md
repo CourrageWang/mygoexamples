@@ -82,11 +82,56 @@ exec
 
 ### `docker`容器持久化村存储以及数据共享
   * 基于本地的文件系统的Volume。
+   ```
+   docker run -d --name mysql1 -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql 【默认会在/var/lib/docker/volumes/目录下生成一个目录作为持久化所需要的目录】。
+   docker run -d -v mysql:/var/lib/mysql --name mysql1 -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql 【默认会在/var/lib/docker/volumes/目录下生成一个目录作为持久化所需要的目录】。
+
+  ```
    - docker后台自动创建。 【Data Volume】`docker run -v mysql:/var/lib/mysql` 
    
-   - 绑定挂载的数据卷。【具体位置由用户指定】 （bind Mouting） 运行容器时指定。
-   
+   - 绑定挂载的数据卷。【具体位置由用户指定】 （bind Mouting） 运行容器时指定。  
   * 第三方的存储方案NAs、AWS。
+  
+  #### `docker compose`使用教程
+  
+  #####  三大概念
+  * `service`
+     `service`代表一个`container`，该`container`可以从`docker`仓库下载也可以是从本地通过`DockerFile`中
+     构建出来。启动时指定`network`和`Volume`。例如：
+     ```
+     ##### 远程仓库下载
+       services:
+        db:
+          image: postgres:9.4
+          volumes:
+            - "db-data:/var/lib/postgresql/data"
+          networks:
+            - back-tier
+     ## 启动
+      docker run -d --network back-tier -v db-data:/var/lib/postgresql/data postgres:9.4
+    ###### 基于本地构建
+       services:
+         worker:
+           build: ./worker
+           links:
+             -db
+             -redis
+           networks:
+             - back-tier
+     ```
+    ![参考示例](WechatIMG1.jpeg)
+    
+     * `NetWork`
+  
+  * `Volumes` 
+  
+  ### 使用`docker-compose`做负载均衡。
+  
+ ### 容器编排
+ * 分布式环境下如何部署以及管理`docker`容器。 
+ * `Swarm`工具`docker`内部已经集成。
+  - `Service`和`Replicas`
+  - `play-with-docker` 
  
  ### 常用命令
  * 显示所有的docker容器的ID号 `docker ps -aq`
@@ -95,3 +140,9 @@ exec
  * 通过`-e`参数给容器设置环境变量 `docker run -d --name test1 -e PENG=hell`可以在进入容器后 使用`env`查看 使用`-e`参数传递参数配置信息。 
  
  
+### 知识点总结
+* `docker`容器之间如何通信
+ - 通过容器Ip地址，但是重启后容器地址会改变。
+ - 通过宿主机 `IP：port` 方式访问，【依靠暴露在外的端口进行访问】。
+ - 通过`link`建立连接
+ - 桥接网络 
