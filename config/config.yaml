@@ -1,6 +1,6 @@
 DB:
-TiDB_DSN: park_info:DEkcEu0@tcp(116.62.132.145:4000)/park_info?charset=utf8&parseTime=true&loc=Local
-OLDTiDB_DSN: config:RmUyNLd95sZr1fcbouRxLXuKa@tcp(116.62.132.145:4000)/config_cloud?charset=utf8
+  TiDB_DSN: root:123456@tcp(127.0.0.1:3306)/parkinfo?charset=utf8&parseTime=true&loc=Local
+  OLDTiDB_DSN: root:123456@tcp(127.0.0.1:3306)/config_cloud?charset=utf8
 REDIS:
   HOST: 114.115.130.182:16379
   PWD: frm
@@ -15,4 +15,5 @@ SERVER:
   MODE: dev
   LOG: ./logs/ParkInfo.log
 DUMP:
+  STATUS: ON
   SPACE: 15
