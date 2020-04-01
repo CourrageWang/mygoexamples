@@ -25,10 +25,21 @@ func composeCleanCarParkSql(date, dbCloum string) (baseSqlStr string) {
 	return
 }
 
-// 组合集团未关联sql
-func composeCleanCompanySql(date string) (baseSql string) {
+// 组合集团未关联sql types【0为新库，1为老库】
+func composeCleanCompanySql(date string, types int) string {
 
-	return
+	var baseSql string
+	if types == 0 {
+		baseSql = " DELETE FROM n_group WHERE NOT EXISTS ( SELECT 1 FROM n_park tpc WHERE tpc.group_code = n_group.id) AND UNIX_TIMESTAMP(n_group.create_at) <= ( SELECT UNIX_TIMESTAMP( DATE_FORMAT( DATE_SUB( NOW( ), INTERVAL " +
+			date +
+			" DAY ), '%Y-%m-%d %H:%i:%S' ) ) )"
+	} else {
+		baseSql = "DELETE FROM t_company_info WHERE NOT EXISTS ( SELECT 1 FROM t_park_info tpi WHERE tpi.cid = t_company_info.id) AND t_company_info.createon <= ( SELECT UNIX_TIMESTAMP( DATE_FORMAT( DATE_SUB( NOW( ), INTERVAL " +
+			date +
+			" DAY ), '%Y-%m-%d %H:%i:%S' ) ) )"
+	}
+
+	return baseSql
 }
 
 // 15天未关联智能设备的车场
@@ -46,12 +57,10 @@ func CleanParks15DaysNotBindARM(duration string) {
 		panic(err.Error())
 	}
 
-	defer oldDB.Close()
-
 	sizeOld, _ := rowsOld.RowsAffected()
 
 	if err == nil {
-		fmt.Println("清除老库数据成功,共清除数据条数为：", sizeOld)
+		fmt.Println("清除老库车场未关联数据成功,共清除数据条数为：", sizeOld)
 	} else {
 		fmt.Println("清除老库数据失败", err.Error())
 	}
@@ -62,10 +71,10 @@ func CleanParks15DaysNotBindARM(duration string) {
 	//step2 删除新库中的脏数据
 	rowsNew, err2 := NewDB.Exec(parkNoRelaNewStr)
 
-	defer NewDB.Close()
+	//defer NewDB.Close()
 	sizeNew, _ := rowsNew.RowsAffected()
 	if err2 == nil {
-		fmt.Println("清除新库数据成功,共清除数据条数为：", sizeNew)
+		fmt.Println("清除新库数车场未关联数据成功,共清除数据条数为：", sizeNew)
 	} else {
 		fmt.Println("清除新库失败", err2.Error())
 	}
@@ -74,4 +83,40 @@ func CleanParks15DaysNotBindARM(duration string) {
 //集团未关联车场15天
 func CleanGroup15DaysNotBindParks(duration string) {
 
+	//组合sql
+	companyNoRelaOldStr := composeCleanCompanySql(duration, 1)
+	fmt.Println("老库清除集团未关联超过", duration, "天的sql语句为:", companyNoRelaOldStr)
+
+	rowsOld, err := oldDB.Exec(companyNoRelaOldStr)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer oldDB.Close()
+
+	sizeOld, _ := rowsOld.RowsAffected()
+
+	if err == nil {
+		fmt.Println("清除老库集团未关联数据成功,共清除数据条数为：", sizeOld)
+	} else {
+		fmt.Println("清除老库集团未关联数据失败", err.Error())
+	}
+
+	//清除新库数据
+
+	companyNoRelaNewStr := composeCleanCompanySql(duration, 0)
+
+	fmt.Println("新库清除集团未关联超过", duration, "天的sql语句为:", companyNoRelaNewStr)
+
+	rowsNew, err2 := NewDB.Exec(companyNoRelaNewStr)
+
+	defer NewDB.Close()
+
+	sizeNew, _ := rowsNew.RowsAffected()
+	if err2 == nil {
+		fmt.Println("清除新库集团未关联数据成功,共清除数据条数为：", sizeNew)
+	} else {
+		fmt.Println("清除新库集团未关联失败", err2.Error())
+	}
 }

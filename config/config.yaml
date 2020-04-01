@@ -1,6 +1,6 @@
 DB:
-  TiDB_DSN: root:123456@tcp(127.0.0.1:3306)/parkinfo?charset=utf8&parseTime=true&loc=Local
-  OLDTiDB_DSN: root:123456@tcp(127.0.0.1:3306)/config_cloud?charset=utf8
+  TiDB_DSN: root:12345678@tcp(127.0.0.1:3306)/parkinfo?charset=utf8&parseTime=true&loc=Local
+  OLDTiDB_DSN: root:12345678@tcp(127.0.0.1:3306)/config_cloud?charset=utf8
 DUMP:
   STATUS: ON
   SPACE: 15
