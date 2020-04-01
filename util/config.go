@@ -3,9 +3,9 @@ package util
 import (
 	"flag"
 	"fmt"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
-	yaml2 "pkg/mod/gopkg.in/yaml.v2@v2.2.2"
 )
 
 type Config struct {
@@ -35,8 +35,9 @@ type Config struct {
 	} `yaml:"SERVER"`
 	DUMP struct {
 		//未关联周期
-		SPACE int `yaml:"SPACE"`
-	} `yaml:DUMP`
+		Space  string `yaml:"SPACE"`
+		Status string `yaml:"STATUS"`
+	} `yaml:"DUMP"`
 }
 
 var Conf *Config
@@ -50,7 +51,7 @@ func findConfigFile() string {
 		return *p
 	}
 
-	return "./conf/config.yaml"
+	return "./config/config.yaml"
 }
 
 func init() {
@@ -75,7 +76,7 @@ func loadFile(f string) error {
 
 func loadByBytes(data []byte) error {
 	var cfg Config
-	if err := yaml2.Unmarshal(data, &cfg); err != nil {
+	if err := yaml.Unmarshal(data, &cfg); err != nil {
 		return err
 	}
 	if cfg.SERVER.BindAddress == "" {
