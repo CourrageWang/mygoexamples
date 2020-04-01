@@ -1,19 +1,6 @@
 DB:
   TiDB_DSN: root:123456@tcp(127.0.0.1:3306)/parkinfo?charset=utf8&parseTime=true&loc=Local
   OLDTiDB_DSN: root:123456@tcp(127.0.0.1:3306)/config_cloud?charset=utf8
-REDIS:
-  HOST: 114.115.130.182:16379
-  PWD: frm
-MQ:
-  MQ_DSN: amqp://guest:guest@116.62.132.145:5672
-PIGEON:
-  ADDR: http://116.62.132.145:9130
-  USER: p
-  PWD: mjfdRMMhEvb43B8HQp6N9Q7r4KuEQg3pOdN
-SERVER:
-  BIND_ADDRESS: 0.0.0.0:8081
-  MODE: dev
-  LOG: ./logs/ParkInfo.log
 DUMP:
   STATUS: ON
   SPACE: 15
